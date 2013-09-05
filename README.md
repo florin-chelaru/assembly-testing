@@ -100,8 +100,10 @@ Below are few ideas to help you implement the test software.
 * Parse the SAM file and print out the insert size of the alignment (hint: it's a field in the SAM file).
 * If the insert size differs by a given number of standard deviation, print the reads. 
 
+In order to get students started quickly, I will provide you with initial testcases (reads and assemblies).  Later in the project, students will need to construct their own testcases.
 
 [AMOSValidate](http://sourceforge.net/apps/mediawiki/amos/index.php?title=Amosvalidate) is software that does similar constraint checking and can be a great resource.
 ## Coming Soon... ##
+* Details on how to generate testcases.
 * Additional constraints.
 * Due dates.
