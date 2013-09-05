@@ -101,4 +101,7 @@ Below are few ideas to help you implement the test software.
 * If the insert size differs by a given number of standard deviation, print the reads. 
 
 
-[AMOSValidate](http://sourceforge.net/apps/mediawiki/amos/index.php?title=Amosvalidate) is software that does identical constraint checking and can be a great resource.  However, the AMOS datastructures use older tools and data structures.
+[AMOSValidate](http://sourceforge.net/apps/mediawiki/amos/index.php?title=Amosvalidate) is software that does similar constraint checking and can be a great resource.
+## Coming Soon... ##
+* Additional constraints.
+* Due dates.
