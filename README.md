@@ -118,7 +118,12 @@ It produces mate-pair files, but you're fine only using one of the two files.  I
 Notice how the output reads are in the fastq format instead of fasta.  Depending on the assembler, you may need to convert to fasta.  Fastq is similar to fasta but contains additional info about the quality of each basepair.  You can use a tool like this http://hannonlab.cshl.edu/fastx_toolkit/download.html to convert them to fasta.  I perfer just running a shell script like:
 ```awk 'NR % 4 == 1 || NR % 4 == 2' myfile.fastq | sed -e 's/@/>/' > myfile.fasta```
 
+### Generating assemblies ###
+There are a collection of different assemblers students can use.  For a very detailed walkthrough, please check out the first part of the AMOS technical report (http://onlinelibrary.wiley.com/doi/10.1002/0471250953.bi1108s33/abstract) for instruction on the assembler Minimus.
+
+Other popular assemblers include SGA (https://github.com/jts/sga), and SOAPdenovo (http://soap.genomics.org.cn/soapdenovo.html).
+
+I recommend that first students generate reads from a ```true''' assembly.  Then manually introduce errors (creating breakpoints, duplicating segments, etc.) into the assembly.  This will provide a way for users to evaluate how well their framework detects the errors.
+
 ## Coming Soon... ##
-* Details on how to generate testcases.
-* Additional constraints.
 * Due dates.
