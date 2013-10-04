@@ -103,6 +103,21 @@ Below are few ideas to help you implement the test software.
 In order to get students started quickly, I will provide you with initial testcases (reads and assemblies).  Later in the project, students will need to construct their own testcases.
 
 [AMOSValidate](http://sourceforge.net/apps/mediawiki/amos/index.php?title=Amosvalidate) is software that does similar constraint checking and can be a great resource.
+
+### Simulating reads ###
+*wgsim* is the tool I use to simulate reads. https://github.com/lh3/wgsim
+
+Download it, and then run: ```gcc -g -O2 -Wall -o wgsim wgsim.c -lz -lm```
+
+Next, you simply enter the reference fasta file you want to generate reads from:
+```wgsim [options] <in.ref.fa> <out.read1.fq> <out.read2.fq>```
+
+It produces mate-pair files, but you're fine only using one of the two files.  If I wanted to create 10 reads (each mate of length 100) without any error, I'd enter:
+```wgsim -1 100 -2 100 -R 0.0 -X 0.0 -e 0.0 -N 10 influenza-output.fasta flu.1.fastq flu.2.fastq```
+
+Notice how the output reads are in the fastq format instead of fasta.  Depending on the assembler, you may need to convert to fasta.  Fastq is similar to fasta but contains additional info about the quality of each basepair.  You can use a tool like this http://hannonlab.cshl.edu/fastx_toolkit/download.html to convert them to fasta.  I perfer just running a shell script like:
+```awk 'NR % 4 == 1 || NR % 4 == 2' myfile.fastq | sed -e 's/@/>/' > myfile.fasta```
+
 ## Coming Soon... ##
 * Details on how to generate testcases.
 * Additional constraints.
