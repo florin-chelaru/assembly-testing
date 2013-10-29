@@ -133,5 +133,7 @@ Other popular assemblers include SGA (https://github.com/jts/sga), and SOAPdenov
 
 I recommend that first students generate reads from a ```true''' assembly.  Then manually introduce errors (creating breakpoints, duplicating segments, etc.) into the assembly.  This will provide a way for users to evaluate how well their framework detects the errors.
 
+## Florin's comments
+
 ## Coming Soon... 
 * Due dates.
