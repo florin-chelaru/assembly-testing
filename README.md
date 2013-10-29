@@ -118,6 +118,14 @@ It produces mate-pair files, but you're fine only using one of the two files.  I
 Notice how the output reads are in the fastq format instead of fasta.  Depending on the assembler, you may need to convert to fasta.  Fastq is similar to fasta but contains additional info about the quality of each basepair.  You can use a tool like this http://hannonlab.cshl.edu/fastx_toolkit/download.html to convert them to fasta.  I perfer just running a shell script like:
 ```awk 'NR % 4 == 1 || NR % 4 == 2' myfile.fastq | sed -e 's/@/>/' > myfile.fasta```
 
+Below are read lengths typically produced by popular sequencing technologies.
+
+| Technology     | Read length (avg) |
+|----------------|-------------------|
+| Illumina HiSeq | 100 bp            |
+| 454            | 400 bp            |
+| PacBio         | 1000 bp            |
+
 ### Generating assemblies ###
 There are a collection of different assemblers students can use.  For a very detailed walkthrough, please check out the first part of the AMOS technical report (http://onlinelibrary.wiley.com/doi/10.1002/0471250953.bi1108s33/abstract) for instruction on the assembler Minimus.
 
