@@ -20,7 +20,7 @@ for tc in testcases/* ; do
     fi
 
     if [ ${return_code} -ne 0 ]; then
-        echo "<testcase name=\"${tc}\" classname=\"None\"/>"
+        echo "<testcase name=\"${tc}\" classname=\"None\">"
         echo "</testcase>"
     else
         echo "<testcase name=\"${tc} fail\" classname=\"None\">"
