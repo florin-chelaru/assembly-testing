@@ -1,35 +1,35 @@
 #! /usr/bin/sh
 
 timestamp=`date +%FT%R:%S`
-
-echo "<testsuites>"
-echo "    <testsuite name=\"Assembler testing\" tests=\"2\" failures=\"1\" timestamp=\"${timestamp}\">"
+tests=0
+failures=0
 
 for tc in testcases/* ; do
     tc=`basename ${tc}`
     testcases/${tc}/run_test.sh
     return_code=$?
 
-    if [ ${return_code} -eq 0 ]; then
-        echo "<testcase name=\"${tc}\" classname=\"None\">"
-        echo "</testcase>"
-    else
-        echo "<testcase name=\"${tc} fail\" classname=\"None\">"
-        echo "     <error message=\"Failed\">Failed2.</error>"
-        echo "</testcase>"
-    fi
+    tests=$((tests + 1))
 
-    if [ ${return_code} -ne 0 ]; then
-        echo "<testcase name=\"${tc}\" classname=\"None\">"
-        echo "</testcase>"
+    if [ ${return_code} -eq 0 ]; then
+        echo "<testcase name=\"${tc}\" classname=\"None\">" >> tmp.results
+        echo "</testcase>" >> tmp.results
     else
-        echo "<testcase name=\"${tc} fail\" classname=\"None\">"
-        echo "     <error message=\"Failed\">Failed2.</error>"
-        echo "</testcase>"
+        echo "<testcase name=\"${tc} fail\" classname=\"None\">" >> tmp.results
+        echo "<error message=\"Failed\">Failed.</error>" >> tmp.results
+        echo "</testcase>" >> tmp.results
+
+        failures=$((failures + 1))
     fi
 
 done
 
-echo "    </testsuite>"
+echo "<testsuites>"
+echo "<testsuite name=\"Assembler testing\" tests=\"${tests}\" failures=\"${failures}\" timestamp=\"${timestamp}\">"
+
+cat tmp.results
+
+echo "</testsuite>"
 echo "</testsuites>"
 
+rm tmp.results
