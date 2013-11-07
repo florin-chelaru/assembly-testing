@@ -1,7 +1,5 @@
 # CMSC737 - Assembly Model Testing #
 
-# Jason's comment
-
 ## Goal ##
 Design software to determine whether an assembly satisfies a set of constraints.
 
@@ -134,8 +132,6 @@ There are a collection of different assemblers students can use.  For a very det
 Other popular assemblers include SGA (https://github.com/jts/sga), and SOAPdenovo (http://soap.genomics.org.cn/soapdenovo.html).
 
 I recommend that first students generate reads from a ```true''' assembly.  Then manually introduce errors (creating breakpoints, duplicating segments, etc.) into the assembly.  This will provide a way for users to evaluate how well their framework detects the errors.
-
-## Florin's comments
 
 ## Coming Soon... 
 * Due dates.
