@@ -1,0 +1,208 @@
+'''
+Created on Nov 6, 2013
+
+@author: florin
+'''
+
+import re
+from org.umd.assemblytest.readcoverage.utis.intervaltree import IntervalTree
+from org.umd.assemblytest.readcoverage.utis.intervaltree import Interval
+from org.umd.assemblytest.readcoverage.constants import SEGMENT_UNMAPPED
+
+class SamFile(object):
+    def __init__(self, header, alignments):
+        '''
+        Constructor
+        '''
+        self._header = header
+        self._alignments = alignments
+        self._alignment_forest = {}
+
+        # Partition alignments by reference
+        alns_by_ref = {}
+        for aln in alignments:
+            if aln.is_unmapped():
+                continue
+            if aln.reference() not in alns_by_ref:
+                alns_by_ref[aln.reference()] = []
+            alns_by_ref[aln.reference()].append(aln)
+
+        for ref, alns in alns_by_ref.iteritems():
+            self._alignment_forest[ref] = IntervalTree(alns)
+
+    def coverage(self, reference, start, length):
+        '''
+        Gets all alignments corresponding to the given region in the genome
+        :param reference:
+        :param start:
+        :param calc_length:
+        '''
+        return self._alignment_forest[reference].search(start, start + length)
+
+    def alignments(self):
+        return self._alignments
+
+    @staticmethod
+    def read(filename):
+        '''        
+        :param filename: 
+        '''
+        try:
+            header = []
+            alignments = []
+            with open(filename) as f:
+                for line in f:
+                    if line.startswith('@'):
+                        # header line
+                        header.append(HeaderEntry.parse(line))
+                        continue
+
+                    alignments.append(Alignment.parse(line))
+
+            return SamFile(header, alignments)
+
+        except EnvironmentError as err:
+            print "Unable to open file: {}".format(err)
+
+class HeaderEntry(object):
+    def __init__(self, text):
+        '''
+        '''
+        self._text = text
+
+    def __str__(self):
+        '''
+        Returns a string representation of the header line
+        '''
+        return self._text
+
+    @staticmethod
+    def parse(text):
+        '''
+        Parses the given line of text and returns an instance of HeaderEntry
+        if successful, or throws an exception otherwise.
+        :param text:
+        '''
+        return HeaderEntry(text)
+
+class Alignment(Interval):
+    def __init__(self, text, qname, flag, rname, pos, mapq, cigar, rnext, pnext, tlen, seq, qual):
+        '''
+        :param text: The original string from which this alignment comes from
+        :param qname:
+        :param flag:
+        :param rname:
+        :param pos:
+        :param mapq:
+        :param cigar:
+        :param rnext:
+        :param pnext:
+        :param tlen:
+        :param seq:
+        :param qual:
+        '''
+
+        self._text = text
+        self._qname = qname
+        self._flag = flag
+        self._rname = rname
+        self._pos = pos
+        self._mapq = mapq
+        self._cigar = cigar
+        self._rnext = rnext
+        self._pnext = pnext
+        self._tlen = tlen
+        self._seq = seq
+        self._qual = qual
+
+        self._alignment_length = -1
+        self._calc_length()
+
+        super(Alignment, self).__init__(self._pos if not self.is_unmapped() else None, self._pos + self._alignment_length if not self.is_unmapped() else None)
+
+    def __str__(self):
+        return self._text
+
+    @staticmethod
+    def parse(text):
+        '''
+        Parses the given line of text and returns an instance of Alignment
+        if successful, or throws an exception otherwise.
+        '''
+        tokens = text.split('\t')
+        flag = int(tokens[1])
+        return Alignment(
+            text,
+            tokens[0],  # qname
+            flag,
+            tokens[2],  # rname
+            int(tokens[3]) if not flag & SEGMENT_UNMAPPED else None,  # pos
+            int(tokens[4]),  # mapq
+            tokens[5],  # cigar
+            tokens[6],  # rnext
+            int(tokens[7]),  # pnext
+            int(tokens[8]),  # tlen
+            tokens[9],  # seq
+            tokens[10])  # qual
+
+    def qname(self):
+        return self._qname
+
+    def flag(self):
+        return self._flag
+
+    def is_unmapped(self):
+        return self._flag & SEGMENT_UNMAPPED
+
+    def reference(self):
+        '''
+        Gets the id of the reference sequence
+        '''
+        return self._rname
+
+    def pos(self):
+        '''
+        Gets the start position of the alignment in the reference sequence
+        '''
+        return self._pos
+
+    def cigar(self):
+        return self._cigar
+
+    def seq(self):
+        return self._seq
+
+    def length(self):
+        return self._alignment_length
+
+    def _calc_length(self):
+        '''
+        Computes the exact overlap calc_length between the read and the reference
+        '''
+        if self._alignment_length >= 0:
+            return self._alignment_length
+
+        if self._flag & SEGMENT_UNMAPPED:
+            self._alignment_length = 0
+            return self._alignment_length
+
+        # Count number of insertions and deletions in the CIGAR string
+        # to find out how big the actual alignment is
+        length = len(self._seq)
+
+        # First, split string into operators
+        op_groups = filter(None, re.split('([0-9]+[MIDNHP=X])', self._cigar))
+
+        # For each group of operations of the same type, decrease computed calc_length
+        # if operator is D(elete) and increase calc_length if it's I(nsert)
+        for group in op_groups:
+            couple = filter(None, re.split('([0-9]+|[MIDNHP=X])', group))
+            # print couple
+            (count, op) = couple
+            if op == 'D':
+                length += int(count)
+            elif op == 'I':
+                length -= int(count)
+
+        self._alignment_length = length
+        return self._alignment_length
