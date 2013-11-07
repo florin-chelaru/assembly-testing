@@ -67,6 +67,6 @@ class SamfileTest(unittest.TestCase):
         for aln in alns:
             print '{0}\t{1}\t{2}\t{3}'.format(aln.reference(), aln.start(), aln.end(), aln.qname())
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     # import sys;sys.argv = ['', 'Test.testName']
     unittest.main()

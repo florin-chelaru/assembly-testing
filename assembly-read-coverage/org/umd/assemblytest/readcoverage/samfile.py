@@ -11,7 +11,7 @@ from org.umd.assemblytest.readcoverage.constants import SEGMENT_UNMAPPED
 
 class SamFile(object):
     '''
-    Contains the base functionality for sam file processing and a static method called parse(filename), 
+    Contains the base functionality for sam file processing and a static method called parse(filename),
     that constructs a SamFile instance, given a system file path.
     '''
     def __init__(self, header, alignments):
@@ -48,8 +48,8 @@ class SamFile(object):
 
     @staticmethod
     def read(filename):
-        '''        
-        :param filename: 
+        '''
+        :param filename:
         '''
         try:
             header = []
@@ -70,8 +70,8 @@ class SamFile(object):
 
 class HeaderEntry(object):
     '''
-    Contains information from the header. Right now, the class has just one field called _text, 
-    containing one line of header information. This class was created for potential future use, 
+    Contains information from the header. Right now, the class has just one field called _text,
+    containing one line of header information. This class was created for potential future use,
     in case we care about the headers in the sam file.
     '''
     def __init__(self, text):
@@ -96,7 +96,7 @@ class HeaderEntry(object):
 
 class Alignment(Interval):
     '''
-    Handles parsing of individual entries in the sam file, with the main columns defined in the 
+    Handles parsing of individual entries in the sam file, with the main columns defined in the
     sam file format
     '''
     def __init__(self, text, qname, flag, rname, pos, mapq, cigar, rnext, pnext, tlen, seq, qual):
