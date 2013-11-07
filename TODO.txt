@@ -1,0 +1,12 @@
+- Potentially understand what the SAM file format contains. There exists a link to the PDF
+tutorial on Chris' Github README.
+
+- PySAM is a library which facilitates parsing of SAM files. We are currently in the process of
+determining what the interoperability between .bam and .sam files are, and how one can create a .bam
+file from a .sam file. .bam files are supposed to be a binary equivalent to .sam files which makes parsing
+faster, and the PySAM library tutorial works on .bam files, however bowtie2 gives us .sam files.
+If we determine how to generate a .bam file from a .sam file, we have a way to use that library
+and its methods for understanding the SAM file format.
+
+- Until Thursday: Jason will study the SAM PDF to try to see what it all means. Michael is trying
+to install PySAM on his computer. 
