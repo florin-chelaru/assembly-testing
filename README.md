@@ -135,5 +135,19 @@ Other popular assemblers include SGA (https://github.com/jts/sga), and SOAPdenov
 
 I recommend that first students generate reads from a ```true''' assembly.  Then manually introduce errors (creating breakpoints, duplicating segments, etc.) into the assembly.  This will provide a way for users to evaluate how well their framework detects the errors.
 
+## Checkpoint 1
+Due date: **November 15th**
+
+By this date, each group should have a basic working implementation of their respective tool.  In addition, each group should have created and tested their tool on a collection of manually created test datasets.
+
+Requirements:
+* Working implementation with ```README``` file.  This ```README``` should describe how to use your tool and the output, specifically how you describe the misassemblies.
+* Small collection of testcases uploaded to ```testcases/*/``` with a README file in each directory explaining the goal of the testcase.  Each testcase should contain a FASTA file of the reads (```input.fasta``` or ```input_1.fasta``` and ```input_2.fasta``` for the mate-pair group), a FASTA file for the assembly (```assembly.fasta```), and a file containing the known misassemblies that you will compare your tool's output with (```oracle```).  
+* For now, include a ```run_test.sh``` script in each testcase directory that runs your tool and returns 0 if it finds all the misassemblies.
+
+Submit a pull request with the above requirements: https://github.com/cmhill/assembly-testing
+
+Currently, the ```run_test.sh``` in the root directory of the repository creates a jUnit XML file based on the testcase results.  It can be viewed here http://gandalf.cs.umd.edu:8080/job/Assembly%20testing/.  I'm currently working on a better plugin for viewing the testcase results.
+
 ## Coming Soon... 
 * Due dates.
