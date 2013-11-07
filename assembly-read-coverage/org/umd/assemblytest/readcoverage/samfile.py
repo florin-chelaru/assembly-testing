@@ -10,6 +10,10 @@ from org.umd.assemblytest.readcoverage.utis.intervaltree import Interval
 from org.umd.assemblytest.readcoverage.constants import SEGMENT_UNMAPPED
 
 class SamFile(object):
+    '''
+    Contains the base functionality for sam file processing and a static method called parse(filename), 
+    that constructs a SamFile instance, given a system file path.
+    '''
     def __init__(self, header, alignments):
         '''
         Constructor
@@ -65,6 +69,11 @@ class SamFile(object):
             print "Unable to open file: {}".format(err)
 
 class HeaderEntry(object):
+    '''
+    Contains information from the header. Right now, the class has just one field called _text, 
+    containing one line of header information. This class was created for potential future use, 
+    in case we care about the headers in the sam file.
+    '''
     def __init__(self, text):
         '''
         '''
@@ -86,6 +95,10 @@ class HeaderEntry(object):
         return HeaderEntry(text)
 
 class Alignment(Interval):
+    '''
+    Handles parsing of individual entries in the sam file, with the main columns defined in the 
+    sam file format
+    '''
     def __init__(self, text, qname, flag, rname, pos, mapq, cigar, rnext, pnext, tlen, seq, qual):
         '''
         :param text: The original string from which this alignment comes from

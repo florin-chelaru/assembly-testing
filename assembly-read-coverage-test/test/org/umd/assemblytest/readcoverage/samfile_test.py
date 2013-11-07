@@ -6,7 +6,7 @@ Created on Nov 6, 2013
 import unittest
 import org.umd.assemblytest.readcoverage.samfile as sam
 
-class Test(unittest.TestCase):
+class SamfileTest(unittest.TestCase):
 
 
     def setUp(self):
@@ -48,6 +48,24 @@ class Test(unittest.TestCase):
         alns = sorted(alns)
         expected_alns = ['gnl|ti|1086975778', 'gnl|ti|1086975821', 'gnl|ti|1086975838', 'gnl|ti|1086975916']
         self.assertItemsEqual(expected_alns, alns)
+
+    def test_samfile_general_usage(self):
+        # Parse a file into a SamFile instance
+        samfile = sam.SamFile.read('../../../../../../tutorial/read_coverage/influenza-A.sam')
+
+        # In the background, the SamFile class partitions the alignments in the file
+        # by reference sequence, and organizes them in an IntervalTree, used for quick
+        # retrieval of overlaps.
+
+        # Compute the coverage of reference sequence '1' within the interval 1-100, and
+        # get all reads overlapping with it.
+        alns = samfile.coverage('1', 1, 100)
+
+        print 'Found {0} alignments overlapping with reference sequence 1 in the range [1, 100]. Here they are:'.format(len(alns))
+
+        print 'Ref\tStart\tEnd\tQName'
+        for aln in alns:
+            print '{0}\t{1}\t{2}\t{3}'.format(aln.reference(), aln.start(), aln.end(), aln.qname())
 
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'Test.testName']
