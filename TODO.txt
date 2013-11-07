@@ -1,12 +1,20 @@
-- Potentially understand what the SAM file format contains. There exists a link to the PDF
-tutorial on Chris' Github README.
+- Florin needs to debug his SAM parsing class to cater for the case where coverage over a window
+larger than 1bp is requested.
 
-- PySAM is a library which facilitates parsing of SAM files. We are currently in the process of
-determining what the interoperability between .bam and .sam files are, and how one can create a .bam
-file from a .sam file. .bam files are supposed to be a binary equivalent to .sam files which makes parsing
-faster, and the PySAM library tutorial works on .bam files, however bowtie2 gives us .sam files.
-If we determine how to generate a .bam file from a .sam file, we have a way to use that library
-and its methods for understanding the SAM file format.
+- Jason and Kostas will use Florin's class (assumed error-free) to implement the sliding window approach.
+Briefly:
 
-- Until Thursday: Jason will study the SAM PDF to try to see what it all means. Michael is trying
-to install PySAM on his computer. 
+	(*) Elementary parsing of the assembly FASTA file (parse every contig, storing its length).
+	(*) Make sure that the window length requested of Florin's class is always a fraction of 
+		the contig's length.
+	(*) Two-pass approach: Go over the entire assembly once and calculate the average coverage over the
+		appropriate window size. That's the first pass. The second pass will flag regions as being
+		above or below an appropriate percentile and output those.
+
+- Michael also mentioned that for Tuesday we can generate a bunch of random correctness tests to prove that our
+system works with various inputs. Atif mentioned that he wants, quote, 4 use cases, unquote, but that's more relevant
+to the other groups, not others. Our group would seem another analogous, and we are also waiting on Chris' input for
+what this analysis might be.
+
+- Potential meetup on both Monday and Tuesday (Tuesday one hour prior to the presentation). 
+	
