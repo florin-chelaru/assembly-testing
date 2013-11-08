@@ -102,14 +102,4 @@ if __name__ == '__main__':
     for contig in coverage.contig_coverage:
         print "Contig with id {0} has {1} base-pairs and {2} windows.".format(contig, cdata.contig_length[contig], len(coverage.contig_coverage[contig]));
         print "Contig with id {0} has a window coverage of {1}.".format(contig, str(coverage.contig_coverage[contig]));
-        
-    
-           
-            
-            
-            
-            
-        
-        
-        
-        
+
