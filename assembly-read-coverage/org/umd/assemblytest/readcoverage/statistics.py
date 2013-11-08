@@ -3,50 +3,35 @@ Created on Nov 7, 2013
 
 @author: jason & kostas
 '''
-
-import numpy
-from samfile import SamFile
-from coverage import ContigData, ContigCoverage
+import numpy as np
+#from samfile import SamFile
+from coverage import ContigCoverage
 # import matplotlib.pyplot as plt
 
-class StatisticalTest(object):
-
-    '''
-    Calculates overall statistics (of certain type) from assembly and
-    applies tests on coverage functions.
-    '''
-
-    '''
-    Constructor docs
-    '''
-    def __init__(self, samfile, contig_data, type_of_test, threshold):
-
-        # Sanity checking first....
-
-        if type_of_test == "Gaussian":
-            self.type = type_of_test;
-            cl = contig_data.contig_length;
-            cov = [];
-            for contig_id in cl:
-                pos = 0;
-                while pos < cl[contig_id]:
-                    cov.append(len(samfile.coverage(contig_id, pos, 1)));
-                    pos += 1;
-            print '%d' % len(cov)
-            mu = numpy.mean(cov);
-            sigma = numpy.std(cov);
-            # print 'mean = %f, sigma = %f' % (mu, sigma)
-            self.thresh_low = mu - threshold * sigma;
-            self.thresh_high = mu + threshold * sigma;
-            # plt.plot(cov);
-            # plt.show();
-
-    def apply(self, contig_cov):
-        print "brb"
-
-
-if __name__ == '__main__':
-    cdata = ContigData('../../../../../data/influenza-A/influenza-A.assembly.fasta');
-    samfile = SamFile.read('../../../../../tutorial/read_coverage/influenza-A.sam');
-    st = StatisticalTest(samfile, cdata, "Gaussian", 3);
-    print 'T_low = {0}, T_high = {1}'.format(st.thresh_low, st.thresh_high);
+class CoverageStats(object):
+    
+    def gaussiantest(self, contig_coverage, threshold):
+    
+        if threshold < 0:
+            raise RuntimeError, "gaussiantest(): Threshold should be non-negative."
+        idstocov = contig_coverage.contig_coverage
+        idstolength = contig_coverage.contig_length
+        win_length = contig_coverage.window_length
+        idstowindowstartpts = contig_coverage.contig_window_starting_points
+        allcovs = np.ndarray.flatten([idstocov[ids] for ids in idstocov])
+        mu = np.mean(allcovs)
+        stdev = np.std(allcovs)
+        t_high = mu + threshold * stdev
+        t_low = mu - threshold * stdev
+        bad_windows = {} # maps ids to numpy arrays
+        for c_id in idstocov:
+            indices_high = idstocov[c_id] > t_high
+            indices_low = idstocov[c_id] < t_low
+            a = np.array(range(indices_high))
+            b = np.array(range(indices_low))
+            #bad_windows_above needs to be a list of triples
+            bad_windows_above = [(idstowindowstartpts[c_id][index], 
+                                  idstowindowstartpts[c_id][index] + win_length - 1,
+                                  idstocov[c_id][index]) 
+                                 for index in a[indices_high]]
+            bad_windows[c_id] = 

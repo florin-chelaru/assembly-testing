@@ -1,9 +1,9 @@
 '''
 Created on Nov 7, 2013
 
-@author: jason & kostas
+@author: jason & kostas        
 '''
-import inspect
+import numpy as np
 from samfile import SamFile
 import matplotlib.pyplot as plt
 
@@ -34,7 +34,7 @@ class ContigData(object):
                     else:
                         self.contig_length[current_key] += (len(line))  # don't count '\n'
         except EnvironmentError as err:
-                print "Unable to open FASTA file: {}".format(err);
+                print "Unable to open FASTA file: {}".format(err); 
 
 
 class ContigCoverage(object):
@@ -56,62 +56,57 @@ class ContigCoverage(object):
     def __init__(self, samfile, contig_data, window_length, step_size):
 
         # Sanity checking -- NEEDS FIX!
-        '''
+        
         if window_length < 0 or step_size < 0:
-            raise RuntimeError, "{0}: Provided negative argument.".format(inspect.stack()[0][3])
+            raise RuntimeError, "ContigCoverage constructor: Provided negative argument."
         if samfile is None or contig_data is None:
-            raise RuntimeError, "{0}: Provided None argument.".format(inspect.stack()[0][3])
-        '''
-
+            raise RuntimeError, "ContigCoverage constructor: Provided None argument."
+        
         # Main algorithm
-        cl = contig_data.contig_length;
-        self.window_length = window_length;
-        self.step_size = step_size;
+        self.window_length = window_length
+        self.step_size = step_size
+        self.contig_length = contig_data.contig_length
         self.contig_coverage = {};  # associates contigs with their windows' coverages.
         self.contig_window_starting_points = {}
+        self.__calcBPCoverage__(samfile, contig_data)
+        cl = contig_data.contig_length
+        window = np.ones(window_length) / window_length
         for contig_id in cl:
-            window_coverage = [];
-            window_starting_points = [];
-            current_pos = 1;
-            while current_pos + window_length - 1 <= cl[contig_id]:
-                window_starting_points.append(current_pos);
-                curr_window_coverage = self.__calcwindowcoverage__(samfile, contig_id, current_pos, window_length)
-                window_coverage.append(curr_window_coverage);
-                current_pos += step_size;
-            # Do I have anything remaining in the contig?
-            if current_pos < cl[contig_id]:
-                window_starting_points.append(current_pos);
-                last_window_coverage = self.__calcwindowcoverage__(samfile, contig_id, current_pos, cl[contig_id] - current_pos + 1)
-                window_coverage.append(last_window_coverage);
+            if window_length == 1:
+                cov = self._bplevelcoverage_[contig_id]
+            else:
+                cov=np.convolve(self._bplevelcoverage_[contig_id], window, 'valid')
+            starting_points = range(len(cov))
+            if step_size > 1: # convolve for speed
+                cov = cov[0::step_size]
+                starting_points = starting_points[0::step_size]
+            self.contig_coverage[contig_id] = cov
+            self.contig_window_starting_points[contig_id] = starting_points
+                
 
-            self.contig_coverage[contig_id] = window_coverage;
-            self.contig_window_starting_points[contig_id] = window_starting_points;
-
-    # Calculate the coverage over an entire window
-    def __calcwindowcoverage__(self, samfile, contig_id, current_pos, window_length):
-        alignments = samfile.coverage(contig_id, current_pos, window_length);
-        total_window_coverage = 0;
-        for aln in alignments:
-            starting_overlap_index = max(aln.start(), current_pos);
-            ending_overlap_index = min(aln.end(), current_pos + window_length - 1);
-            total_window_coverage += (1.0 * (ending_overlap_index - starting_overlap_index + 1)) / window_length;
-        return total_window_coverage;
-
+    def __calcBPCoverage__(self, samfile, contig_data):
+        self._bplevelcoverage_ = dict()
+        cl = contig_data.contig_length
+        for contig_id in cl:
+            cov = np.array([len(samfile.coverage(contig_id, pos, 1)) for pos in range(cl[contig_id])], dtype=np.float32)
+            self._bplevelcoverage_[contig_id] = cov
+        
+    
     def write_coverage_plot(self, contig_id, filename):
         plt.plot(coverage.contig_coverage[contig_id]);
         plt.xlabel('Window index');
         plt.ylabel('Coverage');
         plt.savefig(filename);
-        # plt.show();
+        plt.show();
 
 if __name__ == '__main__':
     cdata = ContigData('../../../../../data/influenza-A/influenza-A.assembly.fasta');
     samfile = SamFile.read('../../../../../tutorial/read_coverage/influenza-A.sam');
-    coverage = ContigCoverage(samfile, cdata, 1, 1);
+    coverage = ContigCoverage(samfile, cdata, 100, 1);
     print "asdfasdfasdf"
     for contig in coverage.contig_coverage:
         print "Contig with id {0} has {1} base-pairs and {2} windows.".format(contig, cdata.contig_length[contig], len(coverage.contig_coverage[contig]));
         print "Contig with id {0} has a window coverage of {1}.".format(contig, str(coverage.contig_coverage[contig]));
 
-    # print 'asdfasdf {0} asdf'.format(len(samfile.coverage('1', 3, 3)));
-    # coverage.write_coverage_plot('1', 'dok.png');
+    print 'asdfasdf {0} asdf'.format(len(samfile.coverage('1', 3, 3)));
+    #coverage.write_coverage_plot('1', 'dok.png');
