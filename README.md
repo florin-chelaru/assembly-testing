@@ -147,7 +147,7 @@ Submit a pull request with the above requirements: https://github.com/cmhill/ass
 
 Currently, the ```run_test.sh``` in the root directory of the repository creates a jUnit XML file based on the testcase results.  It can be viewed here http://gandalf.cs.umd.edu:8080/job/Assembly%20testing/.  I'm currently working on a better plugin for viewing the testcase results.
 
-## It's aliiiveee!
+## It's aliiiveee! >:)
 
 ## Coming Soon... 
 * Due dates.
