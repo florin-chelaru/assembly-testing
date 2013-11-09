@@ -10,20 +10,21 @@ class StatisticalTest(object):
     
     '''
     Computes statistical data (mean, stdev), coverage percentiles
-    of a given sequence<->contig mapping.
+    for a given sequence<->contig mapping.
     '''
-
-
+    
     '''
     Constructor docs
     '''
-    def __init__(self,threshold, type_of_test="Gaussian"):
+    def __init__(self, threshold, type_of_test="Gaussian"):
         
         # Sanity checking first....
         
         if type_of_test == "Gaussian":
-            
-        else:
+            # return "bad" intervals with their μ and σ?
+        else: # percentiles?
+            # return "bad intervals iff they are above or below
+            # certain percentiles?
             
             
     

@@ -98,7 +98,7 @@ class ContigCoverage(object):
 if __name__ == '__main__':
     cdata = ContigData('../../../../../data/influenza-A/influenza-A.assembly.fasta');
     samfile = SamFile.read('../../../../../tutorial/read_coverage/influenza-A.sam');
-    coverage = ContigCoverage(samfile, cdata, 500, 50);
+    coverage = ContigCoverage(samfile, cdata, 100, 1);
     for contig in coverage.contig_coverage:
         print "Contig with id {0} has {1} base-pairs and {2} windows.".format(contig, cdata.contig_length[contig], len(coverage.contig_coverage[contig]));
         print "Contig with id {0} has a window coverage of {1}.".format(contig, str(coverage.contig_coverage[contig]));
