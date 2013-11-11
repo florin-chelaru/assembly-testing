@@ -3,10 +3,11 @@ Created on Nov 7, 2013
 
 @author: jason & kostas
 '''
+
 import numpy as np
-from coverage import parse_fasta_file, ContigBPCoverage, ContigWindowCoverage
-from samfile import SamFile
-import matplotlib.pyplot as plt
+# from coverage import parse_fasta_file, ContigBPCoverage, ContigWindowCoverage
+# from samfile import SamFile
+# import matplotlib.pyplot as plt
 
 class CoverageStatistics(object):
 
@@ -46,18 +47,36 @@ class CoverageStatistics(object):
             retval += template.format(*t)
         return retval
 
+    def write_bv_to_file(self, bvm, file_name):
+        try :
+            with open(file_name, 'w') as f:
+                for cid in bvm:
+                    f.write('>' + cid + '\n')
+                    f.write(''.join(np.char.mod('%d', bvm[cid])) + '\n')
+                f.close()
+        except EnvironmentError as err:
+            print "Unable to open write binary vector to file".format(err);
+        return
+
+    def write_all_files(self, base_name):
+        suffix = '{0}_P{1}.cov'.format(self.test_type, self.test_param)
+        self.write_bv_to_file(self.contig_overcovered_bps, base_name + '_OVER_BP_' + suffix)
+        self.write_bv_to_file(self.contig_undercovered_bps, base_name + '_UNDER_BP_' + suffix)
+        self.write_bv_to_file(self.contig_overcovered_windows, base_name + '_OVER_WIN_' + suffix)
+        self.write_bv_to_file(self.contig_undercovered_windows, base_name + '_UNDER_WIN_' + suffix)
+        return
 
     def to_string(self):
         param_template = '{0:>30}{1:>15}\n'
         if self.test_type == 'Gaussian':
-            title = 'Gaussian test with a standard deviation multiplier threshold of {0}\n'.format(self.param)
+            title = 'Gaussian test with a standard deviation multiplier threshold of {0}\n'.format(self.test_param)
             params = 'Estimated parameters:\n'
             params += param_template.format('Mean (mu):', self.mu)
             params += param_template.format('Standard deviation (sigma):', self.sigma)
             params += param_template.format('High threshold (t_high):', self.t_high)
             params += param_template.format('Low threshold (t_low):', self.t_low)
         elif self.test_type == 'Percentile':
-            title = 'Percentile test for {0}% most extreme values (top/bottom {1}%)\n'.format(100 * self.param, 50 * self.param)
+            title = 'Percentile test for {0}% most extreme values (top/bottom {1}%)\n'.format(100 * self.test_param, 50 * self.test_param)
             params = 'Estimated parameters:\n'
             params += param_template.format('High threshold (t_high):', self.t_high)
             params += param_template.format('Low threshold (t_low):', self.t_low)
@@ -75,23 +94,23 @@ class CoverageStatistics(object):
         table_under += self.__tuple_list_to_string__(template, under_int_list)
         return title + params + '\n' + table_over + '\n' + table_under
 
-    def __init__(self, cov, test_type, param):
+    def __init__(self, cov, test_type, test_param):
         self.test_type = test_type
-        self.param = param
+        self.test_param = test_param
         if test_type == 'Gaussian':
-            if param < 0:
+            if test_param < 0:
                 raise RuntimeError, "CoverageStatistics(): invalid standard deviation multiplier (expected non-negative value)."
             allvals = self.__get_all_values__(cov)
             self.mu = np.mean(allvals)
             self.sigma = np.std(allvals)
-            self.t_high = self.mu + param * self.sigma
-            self.t_low = self.mu - param * self.sigma
+            self.t_high = self.mu + test_param * self.sigma
+            self.t_low = self.mu - test_param * self.sigma
         elif test_type == 'Percentile':
-            if param < 0:
+            if test_param < 0:
                 raise RuntimeError, "CoverageStatistics(): invalid percentile (expected float value in [0,1])."
             allvals = self.__get_all_values__(cov)
             allvals = np.sort(allvals)
-            f = param / 2.0
+            f = test_param / 2.0
             ind_high = np.floor((1 - f) * len(allvals))
             ind_low = np.ceil(f * len(allvals))
             self.t_high = np.float32(allvals[ind_high])
@@ -124,6 +143,7 @@ class CoverageStatistics(object):
             self.contig_overcovered_intervals[cid] = int_over
             self.contig_undercovered_intervals[cid] = int_under
 
+'''
 if __name__ == '__main__':
     samfile = SamFile.read('../../../../../tutorial/read_coverage/influenza-A.sam')
     cdata = parse_fasta_file('../../../../../data/influenza-A/influenza-A.assembly.fasta')
@@ -145,3 +165,4 @@ if __name__ == '__main__':
     # plt.savefig('bp_under.png')
     # plt.plot(st.contig_overcovered_bps[c])
     # plt.savefig('bp_over.png')
+'''

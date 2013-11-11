@@ -3,9 +3,10 @@ Created on Nov 7, 2013
 
 @author: jason & kostas
 '''
+
 import numpy as np
-from samfile import SamFile
 import matplotlib.pyplot as plt
+# from samfile import SamFile
 
 '''
 Read a FASTA assembly file and store the {contig_id, contig_length}
@@ -30,6 +31,7 @@ def parse_fasta_file(filename):
 
 def write_coverage_plot(cov, contig_id, filename):
     plt.plot(cov.contig_coverage[contig_id]);
+    plt.title('Contig {0} coverage'.format(contig_id))
     plt.xlabel('Window index');
     plt.ylabel('Coverage');
     plt.savefig(filename);
@@ -85,6 +87,7 @@ class ContigWindowCoverage(object):
             self.contig_coverage[contig_id] = cov
             self.contig_window_start_index[contig_id] = starting_points
 
+'''
 if __name__ == '__main__':
     samfile = SamFile.read('../../../../../tutorial/read_coverage/influenza-A.sam')
     cdata = parse_fasta_file('../../../../../data/influenza-A/influenza-A.assembly.fasta')
@@ -93,13 +96,7 @@ if __name__ == '__main__':
     # write_coverage_plot(w_cov, '8', 'dok.png')
     print len(w_cov.contig_coverage)
     cov = w_cov
+    # write_coverage_plot(bp_cov, '1', '')
     for c in cov.contig_coverage:
         print "Contig {0} has {1} bp's, {2} windows and coverage: {3}".format(c, cov.contig_length[c], len(cov.contig_coverage[c]), cov.contig_coverage[c]);
-    '''
-    cdata = ContigData('../../../../../data/influenza-A/influenza-A.assembly.fasta');
-    samfile = SamFile.read('../../../../../tutorial/read_coverage/influenza-A.sam');
-    coverage = ContigCoverage(samfile, cdata, 200, 100);
-    for contig in coverage.contig_coverage:
-        print "Contig with id {0} has {1} base-pairs and {2} windows.".format(contig, cdata.contig_length[contig], len(coverage.contig_coverage[contig]));
-        print "Contig with id {0} has a window coverage of {1}.".format(contig, str(coverage.contig_coverage[contig]));
-    '''
+'''
