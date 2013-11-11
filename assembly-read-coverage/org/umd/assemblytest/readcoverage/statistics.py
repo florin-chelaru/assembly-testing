@@ -59,11 +59,11 @@ class CoverageStatistics(object):
         return
 
     def write_all_files(self, base_name):
-        suffix = '{0}_P{1}.cov'.format(self.test_type, self.test_param)
-        self.write_bv_to_file(self.contig_overcovered_bps, base_name + '_OVER_BP_' + suffix)
-        self.write_bv_to_file(self.contig_undercovered_bps, base_name + '_UNDER_BP_' + suffix)
-        self.write_bv_to_file(self.contig_overcovered_windows, base_name + '_OVER_WIN_' + suffix)
-        self.write_bv_to_file(self.contig_undercovered_windows, base_name + '_UNDER_WIN_' + suffix)
+        infix = '_{0}_P{1}'.format(self.test_type, self.test_param)
+        self.write_bv_to_file(self.contig_overcovered_bps, base_name + infix + '_OVER_BP.cov')
+        self.write_bv_to_file(self.contig_undercovered_bps, base_name + infix + '_UNDER_BP.cov')
+        self.write_bv_to_file(self.contig_overcovered_windows, base_name + infix + '_OVER_WIN.co')
+        self.write_bv_to_file(self.contig_undercovered_windows, base_name + infix + '_UNDER_WIN.cov')
         return
 
     def to_string(self):

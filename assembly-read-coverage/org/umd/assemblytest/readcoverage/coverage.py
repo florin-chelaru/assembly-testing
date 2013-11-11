@@ -15,7 +15,7 @@ pairs in a dictionary.
 
 def parse_fasta_file(filename):
     contig_length = dict()
-    try :
+    try:
         with open(filename) as f:
             current_key = None
             for line in f:

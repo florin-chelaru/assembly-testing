@@ -71,6 +71,7 @@ if __name__ == '__main__':
     print 'Results:'
     print st.to_string()
     print 'Writing test results to files...'
-    st.write_all_files(args.output_dir + args.base_name)
+    suffix = '.W{0}_S{1}'.format(args.window_length, args.window_slide_step)
+    st.write_all_files(args.output_dir + args.base_name + suffix)
     print 'Done'
 
