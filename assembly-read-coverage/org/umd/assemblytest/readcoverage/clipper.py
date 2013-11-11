@@ -38,16 +38,28 @@ def parse_args():
     return args
 
 def generate_sam_file(args):
-    bt2name = args.output_dir + args.base_name + '.bt2'
     samname = args.output_dir + args.base_name + '.sam'
+    bt2name = args.output_dir + args.base_name + '.bt2'
+
+    stdout_file = open(samname + '.stdout', 'w')
+    stderr_file = open(samname + '.stderr', 'w')
+
     command1 = 'bowtie2-build ' + args.assembly_file + ' ' + bt2name
-    # bowtie2-align same as bowtie2 (script)?
-    command2 = 'bowtie2-align -x ' + bt2name + ' -f -U ' + args.reads_file + ' -S ' + samname
-    retval = subprocess.call(command1)
+    retval = subprocess.call(command1, stdout=stdout_file, stderr=stderr_file, shell=True)
+
+    stdout_file.close()
+    stderr_file.close()
+
     if retval != 0:
         print 'BowTie2 indexing failed'
         sys.exit(1)
-    retval = subprocess.call(command2)
+
+    stdout_file = open(bt2name + '.stdout', 'w')
+    stderr_file = open(bt2name + '.stderr', 'w')
+
+    # bowtie2-align same as bowtie2 (script)?
+    command2 = 'bowtie2-align -x ' + bt2name + ' -f -U ' + args.reads_file + ' -S ' + samname
+    retval = subprocess.call(command2, stdout=stdout_file, stderr=stderr_file, shell=True)
     if retval != 0:
         print 'BowTie2 alignment failed'
         sys.exit(1)
