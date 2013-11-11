@@ -1,1 +1,7 @@
 *.pyc
+*.bak
+*.cov
+*.bt2
+*.stdout
+*.stderr
+assembly-read-coverage/org/umd/assemblytest/readcoverage/out/*

@@ -16,8 +16,8 @@ class CorrectnessTests:
     # returns: an array of contigs, each a string of a, t, c, and g's.
     def gen_assembly(self, contigcount, length):
         self.assembly = []
-        for s in range(contigcount):
-            self.assembly.append("".join([random.choice(['a','t','c','g']) for i in range(length)]))
+        for _s in range(contigcount):
+            self.assembly.append("".join([random.choice(['a','t','c','g']) for _i in range(length)]))
 
         return self.assembly
 
@@ -64,10 +64,10 @@ if __name__ == "__main__":
     # how generated: 4 contigs each of length 500bp
     tests.gen_assembly(4, 500)
     tests.gen_reads(100,[])
-    tests.write_assembly("assembly_test_001")
-    tests.write_reads("reads_test_001")
-    f = open("oracle_001", "w")
-    f.write(">1\n" + "0"*500 + "\n>2\n" + "0"*500 + "\n>3\n" + "0"*500 + "\n>4\n" + "0"*500 + "\n>5\n" + "0"*500)
+    tests.write_assembly("assembly_test_001.fasta")
+    tests.write_reads("reads_test_001.fasta")
+    f = open("oracle_001.orc", "w")
+    f.write(">1\n" + "0"*500 + "\n>2\n" + "0"*500 + "\n>3\n" + "0"*500 + "\n>4\n" + "0"*500) # Five of these?
     f.close()
 
     # test 2: small duplicate
@@ -75,10 +75,10 @@ if __name__ == "__main__":
     # how generated: 4 contigs each of length 500bp, in contig 1, base pairs 100-120 are repeated.
     tests.gen_assembly(4, 500)
     tests.gen_reads(100,[(0,100, 120)])
-    tests.write_assembly("assembly_test_002")
-    tests.write_reads("reads_test_002")
-    f = open("oracle_002", "w")
-    f.write(">1\n" + "0"*100 + "1"*20 + "0"*380 + "\n>2\n" + "0"*500 + "\n>3\n" + "0"*500 + "\n>4\n" + "0"*500 + "\n>5\n" + "0"*500)
+    tests.write_assembly("assembly_test_002.fasta")
+    tests.write_reads("reads_test_002.fasta")
+    f = open("oracle_002.orc", "w")
+    f.write(">1\n" + "0"*100 + "1"*20 + "0"*380 + "\n>2\n" + "0"*500 + "\n>3\n" + "0"*500 + "\n>4\n" + "0"*500)
     f.close()
 
     # test 3: big duplicate
@@ -86,10 +86,10 @@ if __name__ == "__main__":
     # how generate: 4 contigs each of length 500bp, in contig 1, base pairs 100-300 are repeated.
     tests.gen_assembly(4, 500)
     tests.gen_reads(100,[(0,100,300)])
-    tests.write_assembly("assembly_test_003")
-    tests.write_reads("reads_test_003")
-    f = open("oracle_003", "w")
-    f.write(">1\n" + "0"*100 + "1"*200 + "0"*200 + "\n>2\n" + "0"*500 + "\n>3\n" + "0"*500 + "\n>4\n" + "0"*500 + "\n>5\n" + "0"*500)
+    tests.write_assembly("assembly_test_003.fasta")
+    tests.write_reads("reads_test_003.fasta")
+    f = open("oracle_003.orc", "w")
+    f.write(">1\n" + "0"*100 + "1"*200 + "0"*200 + "\n>2\n" + "0"*500 + "\n>3\n" + "0"*500 + "\n>4\n" + "0"*500)
     f.close()
 
     # test 4: multiple small duplicates, far apart
@@ -97,10 +97,10 @@ if __name__ == "__main__":
     # how generate: 4 contigs each of length 500bp, in contig 1, base pairs 50-75 and 450-475 are repeated.
     tests.gen_assembly(4, 500)
     tests.gen_reads(100,[(0,50,75), (0,450,475)])
-    tests.write_assembly("assembly_test_004")
-    tests.write_reads("reads_test_004")
-    f = open("oracle_004", "w")
-    f.write(">1\n" + "0"*50 + "1"*25 + "0"*375 + "1"*25 + "0"*25 + "\n>2\n" + "0"*500 + "\n>3\n" + "0"*500 + "\n>4\n" + "0"*500 + "\n>5\n" + "0"*500)
+    tests.write_assembly("assembly_test_004.fasta")
+    tests.write_reads("reads_test_004.fasta")
+    f = open("oracle_004.orc", "w")
+    f.write(">1\n" + "0"*50 + "1"*25 + "0"*375 + "1"*25 + "0"*25 + "\n>2\n" + "0"*500 + "\n>3\n" + "0"*500 + "\n>4\n" + "0"*500)
     f.close()
 
     # test 5: multiple small duplicates, close together
@@ -108,8 +108,8 @@ if __name__ == "__main__":
     # how generate: 4 contigs each of length 500bp, in contig 1, base pairs 50-75 and 85-110 are repeated.
     tests.gen_assembly(4, 500)
     tests.gen_reads(100,[(0,50,75), (0, 85,110)])
-    tests.write_assembly("assembly_test_005")
-    tests.write_reads("reads_test_005")
-    f = open("oracle_005", "w")
-    f.write(">1\n" + "0"*50 + "1"*25 + "0"*10 + "1"*25 + "0"*390 + "\n>2\n" + "0"*500 + "\n>3\n" + "0"*500 + "\n>4\n" + "0"*500 + "\n>5\n" + "0"*500)
+    tests.write_assembly("assembly_test_005.fasta")
+    tests.write_reads("reads_test_005.fasta")
+    f = open("oracle_005.orc", "w")
+    f.write(">1\n" + "0"*50 + "1"*25 + "0"*10 + "1"*25 + "0"*390 + "\n>2\n" + "0"*500 + "\n>3\n" + "0"*500 + "\n>4\n" + "0"*500)
     f.close()

@@ -6,8 +6,10 @@ failures=0
 
 for tc in testcases/* ; do
     tc=`basename ${tc}`
-    sh ./testcases/${tc}/run_test.sh
+    cd ./testcases/${tc}/
+    sh run_test.sh
     return_code=$?
+    cd ../../
 
     tests=$((tests + 1))
 

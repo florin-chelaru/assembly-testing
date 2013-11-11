@@ -62,11 +62,11 @@ class CoverageStatistics(object):
         infix = '_{0}_P{1}'.format(self.test_type, self.test_param)
         self.write_bv_to_file(self.contig_overcovered_bps, base_name + infix + '_OVER_BP.cov')
         self.write_bv_to_file(self.contig_undercovered_bps, base_name + infix + '_UNDER_BP.cov')
-        self.write_bv_to_file(self.contig_overcovered_windows, base_name + infix + '_OVER_WIN.co')
+        self.write_bv_to_file(self.contig_overcovered_windows, base_name + infix + '_OVER_WIN.cov') # fixed suffix
         self.write_bv_to_file(self.contig_undercovered_windows, base_name + infix + '_UNDER_WIN.cov')
         return
 
-    def to_string(self):
+    def to_string(self): # Typically one would overwrite _str()_, but still ok
         param_template = '{0:>30}{1:>15}\n'
         if self.test_type == 'Gaussian':
             title = 'Gaussian test with a standard deviation multiplier threshold of {0}\n'.format(self.test_param)
