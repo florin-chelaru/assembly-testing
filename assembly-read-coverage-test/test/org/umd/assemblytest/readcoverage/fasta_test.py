@@ -1,10 +1,10 @@
 '''
 Created on Nov 7, 2013
 
-@author: jason
+@author: jason & kostas
 '''
 import unittest
-from org.umd.assemblytest.readcoverage.coverage import ContigData as CData;
+from org.umd.assemblytest.readcoverage.coverage import parse_fasta_file;
 
 class FastaTest(unittest.TestCase):
 
@@ -19,22 +19,20 @@ class FastaTest(unittest.TestCase):
 
     def testName(self):
         pass
-    
+
     def testParsing(self):
-        cd = CData('resources/dummy_fasta.txt');
-        self.assertTrue('1' in cd.contig_length)
-        self.assertTrue('2' in cd.contig_length)
-        self.assertTrue('non_numerical_id' in cd.contig_length)
-        self.assertTrue('10' in cd.contig_length)
-        
-        #for key in cd.contig_length:
-        #   print "Key {0} maps to: {1}".format(key, cd.contig_length[key]);
-        self.assertEquals(cd.contig_length['1'], 5)
-        self.assertEquals(cd.contig_length['2'], 20)
-        self.assertEquals(cd.contig_length['non_numerical_id'], 0)
-        self.assertEquals(cd.contig_length['10'], 10)
-        
+        cl = parse_fasta_file('resources/dummy_fasta.txt');
+        self.assertTrue('1' in cl)
+        self.assertTrue('2' in cl)
+        self.assertTrue('non_numerical_id' in cl)
+        self.assertTrue('10' in cl)
+
+        self.assertEquals(cl['1'], 5)
+        self.assertEquals(cl['2'], 20)
+        self.assertEquals(cl['non_numerical_id'], 0)
+        self.assertEquals(cl['10'], 10)
+
 
 if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'Test.testName']
+    # import sys;sys.argv = ['', 'Test.testName']
     unittest.main()

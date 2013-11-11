@@ -5,9 +5,9 @@ Created on Nov 6, 2013
 '''
 
 import re
-from org.umd.assemblytest.readcoverage.utis.intervaltree import IntervalTree
-from org.umd.assemblytest.readcoverage.utis.intervaltree import Interval
-from org.umd.assemblytest.readcoverage.constants import SEGMENT_UNMAPPED
+from utils.intervaltree import IntervalTree
+from utils.intervaltree import Interval
+from constants import SEGMENT_UNMAPPED
 
 class SamFile(object):
     '''
@@ -101,18 +101,18 @@ class Alignment(Interval):
     '''
     def __init__(self, text, qname, flag, rname, pos, mapq, cigar, rnext, pnext, tlen, seq, qual):
         '''
-        :param text: The original string from which this alignment comes from
-        :param qname:
-        :param flag:
-        :param rname:
-        :param pos:
-        :param mapq:
-        :param cigar:
-        :param rnext:
-        :param pnext:
-        :param tlen:
-        :param seq:
-        :param qual:
+        :test_param text: The original string from which this alignment comes from
+        :test_param qname:
+        :test_param flag:
+        :test_param rname:
+        :test_param pos:
+        :test_param mapq:
+        :test_param cigar:
+        :test_param rnext:
+        :test_param pnext:
+        :test_param tlen:
+        :test_param seq:
+        :test_param qual:
         '''
 
         self._text = text
