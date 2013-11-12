@@ -18,12 +18,13 @@ a windowed approach, where the step size equals the window length.
 Description of output
 ---------------------
 
-- The tool produces output in three forms:
+- The tool produces output in four forms:
 	(a) At the base-pair level (an assembly-length binary vector where each element indicates whether the corresponding base-pair is part of a repeat or not)
 	(b) At the window level (same, but at a windowed level)
 	(c) At the region level (textual output, which give the exact regions of the repeats)
-
-- The formats (a) and (b) were chosen because they are easy to compare against oracles and (c) is easy for humans to digest.
+	(d) We also output a graphical representation of coverage.
+	
+- The formats (a) and (b) were chosen because they are easy to compare against oracles and (c), (d) are easy for humans to digest.
 
 ###################
 How to run the tool

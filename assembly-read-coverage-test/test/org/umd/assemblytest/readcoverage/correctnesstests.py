@@ -17,21 +17,21 @@ class CorrectnessTests:
     def gen_assembly(self, contigcount, length):
         self.assembly = []
         for _s in range(contigcount):
-            self.assembly.append("".join([random.choice(['a','t','c','g']) for _i in range(length)]))
+            self.assembly.append("".join([random.choice(['a', 't', 'c', 'g']) for _i in range(length)]))
 
         return self.assembly
 
     # Generates reads corresponding to the generated assembly.
     # readlen: the length of reads to produce
-    #   note - some reads will be shorter if contig length is not a multiple of readlen
+    # note - some reads will be shorter if contig length is not a multiple of readlen
     # repeatcoords: list of tuples designating repeat locations, (contig, startpos)
     # returns: an array of strings of reads
     def gen_reads(self, readlen, repeatcoords):
         self.reads = []
         for contig in self.assembly:
-            readcount = int(math.ceil(1.0*len(contig)/readlen))
-            for pos in [i*readlen for i in range(readcount)]:
-                self.reads.append(contig[pos:min(pos+readlen, len(contig))])
+            readcount = int(math.ceil(1.0 * len(contig) / readlen))
+            for pos in [i * readlen for i in range(readcount)]:
+                self.reads.append(contig[pos:min(pos + readlen, len(contig))])
 
         # insert repeats
         for repeat in repeatcoords:
@@ -44,7 +44,7 @@ class CorrectnessTests:
     def write_assembly(self, filename):
         f = open(filename, 'w')
         for i in range(len(self.assembly)):
-            f.write(">" + str(i+1) + "\n")
+            f.write(">" + str(i + 1) + "\n")
             f.write(self.assembly[i] + "\n")
         f.close()
 
@@ -52,7 +52,7 @@ class CorrectnessTests:
     def write_reads(self, filename):
         f = open(filename, 'w')
         for i in range(len(self.reads)):
-            f.write(">" + str(i+self.readnamestart) + "\n")
+            f.write(">" + str(i + self.readnamestart) + "\n")
             f.write(self.reads[i] + "\n")
         f.close()
 
@@ -63,18 +63,18 @@ if __name__ == "__main__":
     # novelty: no duplicates
     # how generated: 4 contigs each of length 500bp
     tests.gen_assembly(4, 500)
-    tests.gen_reads(100,[])
+    tests.gen_reads(100, [])
     tests.write_assembly("assembly_test_001.fasta")
     tests.write_reads("reads_test_001.fasta")
     f = open("oracle_001.orc", "w")
-    f.write(">1\n" + "0"*500 + "\n>2\n" + "0"*500 + "\n>3\n" + "0"*500 + "\n>4\n" + "0"*500) # Five of these?
+    f.write(">1\n" + "0"*500 + "\n>2\n" + "0"*500 + "\n>3\n" + "0"*500 + "\n>4\n" + "0"*500)  # Five of these?
     f.close()
 
     # test 2: small duplicate
     # novelty: has small segment with single duplicate, our method should detect this.
     # how generated: 4 contigs each of length 500bp, in contig 1, base pairs 100-120 are repeated.
     tests.gen_assembly(4, 500)
-    tests.gen_reads(100,[(0,100, 120)])
+    tests.gen_reads(100, [(0, 100, 120)])
     tests.write_assembly("assembly_test_002.fasta")
     tests.write_reads("reads_test_002.fasta")
     f = open("oracle_002.orc", "w")
@@ -85,7 +85,7 @@ if __name__ == "__main__":
     # novelty: has big segment with single duplicate, our method should also detect large duplicates.
     # how generate: 4 contigs each of length 500bp, in contig 1, base pairs 100-300 are repeated.
     tests.gen_assembly(4, 500)
-    tests.gen_reads(100,[(0,100,300)])
+    tests.gen_reads(100, [(0, 100, 300)])
     tests.write_assembly("assembly_test_003.fasta")
     tests.write_reads("reads_test_003.fasta")
     f = open("oracle_003.orc", "w")
@@ -96,7 +96,7 @@ if __name__ == "__main__":
     # novelty: Multiple duplicates. Our method should be capable of finding more than single duplicates.
     # how generate: 4 contigs each of length 500bp, in contig 1, base pairs 50-75 and 450-475 are repeated.
     tests.gen_assembly(4, 500)
-    tests.gen_reads(100,[(0,50,75), (0,450,475)])
+    tests.gen_reads(100, [(0, 50, 75), (0, 450, 475)])
     tests.write_assembly("assembly_test_004.fasta")
     tests.write_reads("reads_test_004.fasta")
     f = open("oracle_004.orc", "w")
@@ -107,7 +107,7 @@ if __name__ == "__main__":
     # novelty: Multiple duplicates, with close proximity. Our method should detect duplicates even when close together.
     # how generate: 4 contigs each of length 500bp, in contig 1, base pairs 50-75 and 85-110 are repeated.
     tests.gen_assembly(4, 500)
-    tests.gen_reads(100,[(0,50,75), (0, 85,110)])
+    tests.gen_reads(100, [(0, 50, 75), (0, 85, 110)])
     tests.write_assembly("assembly_test_005.fasta")
     tests.write_reads("reads_test_005.fasta")
     f = open("oracle_005.orc", "w")
