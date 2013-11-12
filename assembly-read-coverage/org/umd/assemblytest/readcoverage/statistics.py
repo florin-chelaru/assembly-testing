@@ -5,9 +5,6 @@ Created on Nov 7, 2013
 '''
 
 import numpy as np
-# from coverage import parse_fasta_file, ContigBPCoverage, ContigWindowCoverage
-# from samfile import SamFile
-# import matplotlib.pyplot as plt
 
 class CoverageStatistics(object):
 
@@ -58,12 +55,11 @@ class CoverageStatistics(object):
             print "Unable to open write binary vector to file".format(err);
         return
 
-    def write_all_files(self, base_name):
-        infix = '_{0}_P{1}'.format(self.test_type, self.test_param)
-        self.write_bv_to_file(self.contig_overcovered_bps, base_name + infix + '_OVER_BP.cov')
-        self.write_bv_to_file(self.contig_undercovered_bps, base_name + infix + '_UNDER_BP.cov')
-        self.write_bv_to_file(self.contig_overcovered_windows, base_name + infix + '_OVER_WIN.cov')  # fixed suffix
-        self.write_bv_to_file(self.contig_undercovered_windows, base_name + infix + '_UNDER_WIN.cov')
+    def write_all_files(self, partial_name):
+        self.write_bv_to_file(self.contig_overcovered_bps, partial_name + '_OVER_BP.cov')
+        self.write_bv_to_file(self.contig_undercovered_bps, partial_name + '_UNDER_BP.cov')
+        self.write_bv_to_file(self.contig_overcovered_windows, partial_name + '_OVER_WIN.cov')  # fixed suffix
+        self.write_bv_to_file(self.contig_undercovered_windows, partial_name + '_UNDER_WIN.cov')
         return
 
     def to_string(self):  # Typically one would overwrite _str()_, but still ok
@@ -142,27 +138,3 @@ class CoverageStatistics(object):
             # lists of intervals
             self.contig_overcovered_intervals[cid] = int_over
             self.contig_undercovered_intervals[cid] = int_under
-
-'''
-if __name__ == '__main__':
-    samfile = SamFile.read('../../../../../tutorial/read_coverage/influenza-A.sam')
-    cdata = parse_fasta_file('../../../../../data/influenza-A/influenza-A.assembly.fasta')
-    bp_cov = ContigBPCoverage(samfile, cdata)
-    w_cov = ContigWindowCoverage(bp_cov, 100, 1)
-    st = CoverageStatistics(w_cov, 'Gaussian', 2.0)
-    # st = CoverageStatistics(w_cov, 'Percentile', 0.05)
-    print st.to_string()
-    # for c in st.contig_overcovered_intervals:
-    #    print st.contig_overcovered_intervals[c]
-    # bp = np.array([True, False, True, True, False, True, True, True])
-    # print st.__map_bp_to_int__(bp)
-    # c = '8'
-    # plt.plot(w_cov.contig_coverage[c])
-    # plt.savefig('cov.png')
-    # plt.plot(st.contig_overcovered_windows[c])
-    # plt.savefig('win_over.png')
-    # plt.plot(st.contig_undercovered_bps[c])
-    # plt.savefig('bp_under.png')
-    # plt.plot(st.contig_overcovered_bps[c])
-    # plt.savefig('bp_over.png')
-'''

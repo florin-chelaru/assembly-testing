@@ -63,6 +63,9 @@ def generate_sam_file(args):
 
 if __name__ == '__main__':
     args = parse_args()
+    cov_params_str = '.W{0}_S{1}'.format(args.window_length, args.window_slide_step)
+    test_params_str = '_{0}_P{1}'.format(args.test_type, args.test_param)
+    partial_name = args.output_dir + args.base_name + cov_params_str + test_params_str
     print 'Calculating alignments (SAM file) using BowTie2...'
     sam_filename = generate_sam_file(args)
     print 'Parsing SAM file...'
@@ -78,9 +81,7 @@ if __name__ == '__main__':
     print 'Results:'
     print st.to_string()
     print 'Writing test results to text files...'
-    partial_name = args.output_dir + args.base_name + '.W{0}_S{1}'.format(args.window_length, args.window_slide_step)
     st.write_all_files(partial_name)
-    print 'Writing test results to image file...'
-    name = partial_name + '_{0}_P{1}.png'.format(st.test_type, st.test_param)
-    gr.plot_results(bp_cov.contig_coverage, st.contig_overcovered_bps, st.contig_undercovered_bps, 20, 10, name)
+    print 'Writing test results to image files...'
+    gr.write_all_images(bp_cov, w_cov, st, 20, 10, partial_name)
     print 'Done'  # THIS LINE IS DEDICATED TO JASON

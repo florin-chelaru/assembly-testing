@@ -5,7 +5,6 @@ Created on Nov 7, 2013
 '''
 
 import numpy as np
-# from samfile import SamFile
 
 '''
 Read a FASTA assembly file and store the {contig_id, contig_length}
@@ -77,17 +76,3 @@ class ContigWindowCoverage(object):
                 starting_points = starting_points[0::step_size]
             self.contig_coverage[contig_id] = cov
             self.contig_window_start_index[contig_id] = starting_points
-
-'''
-if __name__ == '__main__':
-    samfile = SamFile.read('../../../../../tutorial/read_coverage/influenza-A.sam')
-    cdata = parse_fasta_file('../../../../../data/influenza-A/influenza-A.assembly.fasta')
-    bp_cov = ContigBPCoverage(samfile, cdata)
-    w_cov = ContigWindowCoverage(bp_cov, 100, 1)
-    # write_coverage_plot(w_cov, '8', 'dok.png')
-    print len(w_cov.contig_coverage)
-    cov = w_cov
-    # write_coverage_plot(bp_cov, '1', '')
-    for c in cov.contig_coverage:
-        print "Contig {0} has {1} bp's, {2} windows and coverage: {3}".format(c, cov.contig_length[c], len(cov.contig_coverage[c]), cov.contig_coverage[c]);
-'''
