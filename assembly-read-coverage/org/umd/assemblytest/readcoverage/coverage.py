@@ -5,7 +5,6 @@ Created on Nov 7, 2013
 '''
 
 import numpy as np
-import matplotlib.pyplot as plt
 # from samfile import SamFile
 
 '''
@@ -28,14 +27,6 @@ def parse_fasta_file(filename):
     except EnvironmentError as err:
         print "Unable to open FASTA file: {}".format(err);
     return contig_length
-
-def write_coverage_plot(cov, contig_id, filename):
-    plt.plot(cov.contig_coverage[contig_id]);
-    plt.title('Contig {0} coverage'.format(contig_id))
-    plt.xlabel('Window index');
-    plt.ylabel('Coverage');
-    plt.savefig(filename);
-    # plt.show();
 
 class ContigBPCoverage:
 
@@ -72,7 +63,7 @@ class ContigWindowCoverage(object):
         self.window_length = window_length
         self.step_size = step_size
         self.contig_length = bp_coverage.contig_length
-        self.contig_coverage = {};  # associates contigs with their windows' coverages
+        self.contig_coverage = {}  # associates contigs with their windows' coverages
         self.contig_window_start_index = {}
         window = np.ones(window_length) / window_length
         for contig_id in bp_coverage.contig_length:

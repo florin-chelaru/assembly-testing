@@ -8,6 +8,7 @@ import argparse, sys, os.path, subprocess
 from samfile import SamFile
 import coverage as cov
 import statistics as stat
+import graphics as gr
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Detects assembly regions of extreme coverage')
@@ -40,23 +41,17 @@ def parse_args():
 def generate_sam_file(args):
     samname = args.output_dir + args.base_name + '.sam'
     bt2name = args.output_dir + args.base_name + '.bt2'
-
-    stdout_file = open(samname + '.stdout', 'w')
-    stderr_file = open(samname + '.stderr', 'w')
-
+    stdout_file = open(bt2name + '.stdout', 'w')
+    stderr_file = open(bt2name + '.stderr', 'w')
     command1 = 'bowtie2-build ' + args.assembly_file + ' ' + bt2name
     retval = subprocess.call(command1, stdout=stdout_file, stderr=stderr_file, shell=True)
-
     stdout_file.close()
     stderr_file.close()
-
     if retval != 0:
         print 'BowTie2 indexing failed'
         sys.exit(1)
-
-    stdout_file = open(bt2name + '.stdout', 'w')
-    stderr_file = open(bt2name + '.stderr', 'w')
-
+    stdout_file = open(samname + '.stdout', 'w')
+    stderr_file = open(samname + '.stderr', 'w')
     # bowtie2-align same as bowtie2 (script)?
     command2 = 'bowtie2-align -x ' + bt2name + ' -f -U ' + args.reads_file + ' -S ' + samname
     retval = subprocess.call(command2, stdout=stdout_file, stderr=stderr_file, shell=True)
@@ -82,8 +77,10 @@ if __name__ == '__main__':
     st = stat.CoverageStatistics(w_cov, args.test_type, args.test_param)
     print 'Results:'
     print st.to_string()
-    print 'Writing test results to files...'
-    suffix = '.W{0}_S{1}'.format(args.window_length, args.window_slide_step)
-    st.write_all_files(args.output_dir + args.base_name + suffix)
-    print 'Done'
-
+    print 'Writing test results to text files...'
+    partial_name = args.output_dir + args.base_name + '.W{0}_S{1}'.format(args.window_length, args.window_slide_step)
+    st.write_all_files(partial_name)
+    print 'Writing test results to image file...'
+    name = partial_name + '_{0}_P{1}.png'.format(st.test_type, st.test_param)
+    gr.plot_results(bp_cov.contig_coverage, st.contig_overcovered_bps, st.contig_undercovered_bps, 20, 10, name)
+    print 'Done'  # THIS LINE IS DEDICATED TO JASON
