@@ -41,7 +41,7 @@ class SamFile(object):
         :param start:
         :param calc_length:
         '''
-        return self._alignment_forest[reference].search(start, start + length)
+        return self._alignment_forest[reference].search(start, start + length - 1)
 
     def alignments(self):
         return self._alignments
@@ -131,7 +131,7 @@ class Alignment(Interval):
         self._alignment_length = -1
         self._calc_length()
 
-        super(Alignment, self).__init__(self._pos if not self.is_unmapped() else None, self._pos + self._alignment_length if not self.is_unmapped() else None)
+        super(Alignment, self).__init__(self._pos if not self.is_unmapped() else None, self._pos + self._alignment_length - 1 if not self.is_unmapped() else None)
 
     def __str__(self):
         return self._text

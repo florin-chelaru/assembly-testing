@@ -33,7 +33,7 @@ class ContigBPCoverage:
         self.contig_length = contig_length
         self.contig_coverage = dict()
         for contig_id in contig_length:
-            cov = np.array([len(samfile.coverage(contig_id, pos, 1)) for pos in range(contig_length[contig_id])], dtype=np.float32)
+            cov = np.array([len(samfile.coverage(contig_id, pos, 1)) for pos in range(1, contig_length[contig_id] + 1)], dtype=np.float32)
             self.contig_coverage[contig_id] = cov
 
 class ContigWindowCoverage(object):
