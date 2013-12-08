@@ -4,7 +4,7 @@ Created on Nov 10, 2013
 @author: kzampog
 '''
 
-import argparse, sys, os.path, subprocess
+import argparse, sys, os, subprocess
 from samfile import SamFile
 import coverage as cov
 import statistics as stat
@@ -21,16 +21,17 @@ def parse_args():
     parser.add_argument('-o', '--output_dir', default='./out/', required=False, help='Output file directory', metavar='OUT_DIR')
     args = parser.parse_args()
     # File and path existence checks
-    err = ''
     if not os.path.exists(args.assembly_file):
-        err = 'assembly file'
-    if not os.path.exists(args.reads_file):
-        err = 'read sequences file'
-    if not os.path.isdir(args.output_dir):
-        err = 'output directory'
-    if err != '':
-        print 'Non-existent ' + err + '.'
+        print 'Could not open assembly file.'
         sys.exit(1)
+    if not os.path.exists(args.reads_file):
+        print 'Could not open read sequences file.'
+        sys.exit(1)
+    if not os.path.isdir(args.output_dir):
+        try:
+            os.makedirs(args.output_dir)
+        except OSError as err:
+            print 'Could not create output directory: {}'.format(err);
     if len(args.output_dir) > 0 and args.output_dir[-1] != '/':
         args.output_dir += '/'
     base_name = os.path.basename(args.assembly_file)[::-1]

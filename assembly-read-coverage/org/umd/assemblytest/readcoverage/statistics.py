@@ -51,7 +51,7 @@ class CoverageStatistics(object):
                     f.write(''.join(np.char.mod('%d', bvm[cid])) + '\n')
                 f.close()
         except EnvironmentError as err:
-            print "Unable to open write binary vector to file".format(err);
+            print "Unable to open write binary vector to file: {}".format(err);
         return
 
     def write_int_list_to_file(self, file_name):
@@ -74,7 +74,7 @@ class CoverageStatistics(object):
                     f.write(str(a) + '\t' + str(b) + '\t' + str(c) + '\tUnder-coverage\n')
                 f.close()
         except EnvironmentError as err:
-            print "Unable to open write interval list to file".format(err);
+            print "Unable to open write interval list to file: {}".format(err);
         return
 
     def write_all_files(self, partial_name):
