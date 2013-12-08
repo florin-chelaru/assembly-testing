@@ -54,11 +54,35 @@ class CoverageStatistics(object):
             print "Unable to open write binary vector to file".format(err);
         return
 
+    def write_int_list_to_file(self, file_name):
+        '''
+        Write all our misassembled regions to an ascii file, in the format agreed upon
+        with the rest of the CompBio teams.
+        
+        @contact: jasonfil@cs.umd.edu
+        @author: Jason Filippou 
+        @param file_name: A character string representing the filesystem path to write to. 
+        '''
+
+        try :
+            with open(file_name, 'w') as f:
+                over_int_list = [(cid, t[0], t[1]) for cid in self.contig_overcovered_intervals for t in self.contig_overcovered_intervals[cid]]
+                under_int_list = [(cid, t[0], t[1]) for cid in self.contig_undercovered_intervals for t in self.contig_undercovered_intervals[cid]]
+                for (a, b, c) in over_int_list:
+                    f.write(str(a) + '\t' + str(b) + '\t' + str(c) + '\tOver-coverage\n')
+                for (a, b, c) in under_int_list:
+                    f.write(str(a) + '\t' + str(b) + '\t' + str(c) + '\tUnder-coverage\n')
+                f.close()
+        except EnvironmentError as err:
+            print "Unable to open write interval list to file".format(err);
+        return
+
     def write_all_files(self, partial_name):
         self.write_bv_to_file(self.contig_overcovered_bps, partial_name + '_OVER_BP.cov')
         self.write_bv_to_file(self.contig_undercovered_bps, partial_name + '_UNDER_BP.cov')
         self.write_bv_to_file(self.contig_overcovered_windows, partial_name + '_OVER_WIN.cov')
         self.write_bv_to_file(self.contig_undercovered_windows, partial_name + '_UNDER_WIN.cov')
+        self.write_int_list_to_file(partial_name + '.csv')
         return
 
     def to_string(self):  # Typically one would overwrite _str()_, but still ok
