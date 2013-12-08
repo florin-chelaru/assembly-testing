@@ -9,7 +9,6 @@ import numpy as np
 class CoverageStatistics(object):
 
     def __get_all_values__(self, cov):
-        # Beautiful code
         allvals = [cov.contig_coverage[cid].tolist() for cid in cov.contig_coverage]
         allvals = np.array([item for sublist in allvals for item in sublist])
         return allvals
@@ -58,7 +57,7 @@ class CoverageStatistics(object):
     def write_all_files(self, partial_name):
         self.write_bv_to_file(self.contig_overcovered_bps, partial_name + '_OVER_BP.cov')
         self.write_bv_to_file(self.contig_undercovered_bps, partial_name + '_UNDER_BP.cov')
-        self.write_bv_to_file(self.contig_overcovered_windows, partial_name + '_OVER_WIN.cov')  # fixed suffix
+        self.write_bv_to_file(self.contig_overcovered_windows, partial_name + '_OVER_WIN.cov')
         self.write_bv_to_file(self.contig_undercovered_windows, partial_name + '_UNDER_WIN.cov')
         return
 
