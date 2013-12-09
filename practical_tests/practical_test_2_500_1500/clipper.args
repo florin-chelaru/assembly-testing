@@ -1,1 +1,0 @@
--a ./influenza-A.assembly.fasta -r ./out.read1.fasta -w 125 -s 1 -t Gaussian -p 1.6
