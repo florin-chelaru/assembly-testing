@@ -62,17 +62,17 @@ def f_score(bv1, bv2):
 
 if __name__ == '__main__':
     args = parse_args()
-    misassemblies_dict = parse_fasta_file(args.misassemblies_file) # returns a dictionary which maps contig ids to the contig itself
-    #print misassemblies_dict
-    oracle_dict = parse_fasta_file(args.oracle_file) # same thing
-    misassemblies_bv, oracle_bv = concatenate_consistently(misassemblies_dict, oracle_dict) # Returns two boolean vectors
-    ji = jaccard_index(misassemblies_bv, oracle_bv) # Calculates the jaccard index for the two vectors
-    fs = f_score(misassemblies_bv, oracle_bv) # Same for the f-score
+    misassemblies_dict = parse_fasta_file(args.misassemblies_file)  # returns a dictionary which maps contig ids to the contig itself
+    # print misassemblies_dict
+    oracle_dict = parse_fasta_file(args.oracle_file)  # same thing
+    misassemblies_bv, oracle_bv = concatenate_consistently(misassemblies_dict, oracle_dict)  # Returns two boolean vectors
+    ji = jaccard_index(misassemblies_bv, oracle_bv)  # Calculates the jaccard index for the two vectors
+    fs = f_score(misassemblies_bv, oracle_bv)  # Same for the f-score
     print "Comparison with ground truth oracle..."
     print 'Jaccard index: {0}'.format(ji)
     print 'F-score: {0}'.format(fs)
-    if fs < 0.5: #Tune-able parameter
-        print 'Test FAILED' 
+    if fs < 0.5:  # Tune-able parameter
+        print 'Test FAILED'
         sys.exit(1)
     else:
         print 'Test SUCCESSFUL'
