@@ -1,1 +1,0 @@
--a ./assembly.fasta -r ./out.read1.fasta -w 50000 -s 1 -t Gaussian -p 1.5
