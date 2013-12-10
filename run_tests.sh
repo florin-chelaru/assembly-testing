@@ -11,7 +11,7 @@ for tc in testcases/group_1/* ; do
 	    cd ./testcases/group_1/${tc}/
 	    echo $tc
 	    sh run_test.sh
-    	    return_code=$?
+    	return_code=$?
 	    cd ../../../
 
 	    tests=$((tests + 1))
