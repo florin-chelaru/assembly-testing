@@ -1,21 +1,35 @@
-count_10000_length_500_error_0 (influenza):
-tc_1	practical_test_influenza-A.assembly.fasta_1_500_1500
-tc_2	practical_test_influenza-A.assembly.fasta_1_500_1500_2_500_1500
-tc_3	practical_test_influenza-A.assembly.fasta_2_200_250_3_100_400
+TESTCASE_ID	GENOME		CONTIG_ID	START_REPEAT_SEGMENT	END_REPEAT_SEGMENT	READ_LENGTH	NUMBER_READS
 
-count_20000_length_100_error_0 (influenza):
-tc_4	practical_test_influenza-A.assembly.fasta_1_500_1500
-tc_5	practical_test_influenza-A.assembly.fasta_1_500_1500_2_500_1500
-tc_6	practical_test_influenza-A.assembly.fasta_2_200_250_3_100_400
+tc_1		INFLUENZA-A	1			500		1500			500		10000	
+tc_2		INFLUENZA-A 	1			500		1500			500		10000	
+				2			500		1500			
+tc_3		INFLUENZA-A	2			200		250			500		10000
+				3			100		400					
+
+tc_4		INFLUENZA-A	1			500		1500			100		20000
+tc_5		INFLUENZA-A	1			500		1500			100		20000
+				2			500		1500
+tc_6		INFLUENZA-A	2			200		250			100		20000
+				3			100		400			
 
 count_20000_length_100_error_0 (aeropyrum pernix + influenza):
-tc_7	practical_test_aeropyrum_pernix_k1_assembly.fasta_1_100000_200000_1_300000_400000_1_500000_600000_1_700000_750000_1_800000_820000
-tc_8	practical_test_aeropyrum_pernix_k1_assembly.fasta_1_100000_600000
-tc_9	practical_test_influenza-A.assembly.fasta_1_500_1500
-tc_10	practical_test_influenza-A.assembly.fasta_1_500_1500_2_500_1500
-tc_11	practical_test_influenza-A.assembly.fasta_2_200_250_3_100_400
+tc_7	AEROPYRUM_PERNIX_K1	1 			100000		200000			100		20000
+				1			300000		400000			
+				1			500000		600000
+				1			700000		750000
+				1			800000		820000
+tc_8	AEROPYRUM_PERNIX_K1	1			100000		600000			100		20000
+tc_9	INFLUENZA-A		1			500		1500			100		20000
+tc_10	INFLUENZA-A		1			500		1500			100		20000
+				2			500		1500	
+tc_11	INFLUENZA-A		2			200		250			100		20000
+				3			100		400			
 
 count_10000_length_500_error_0 (E-Coli K1-12):
 
-tc_12 practical_test_e_coli_k12_assembly.fasta_1_100000_200000_1_300000_400000_1_500000_600000_1_700000_750000_1_800000_820000
-tc_13 practical_test_e_coli_k12_assembly.fasta_1_100000_600000
+tc_12 		E_COLI_K12	1			100000		200000			500		10000
+				1			300000		400000
+				1			500000		600000
+				1			700000		750000
+				1			800000		820000
+tc_13 		E_COLI_K12	1			100000		600000			500		10000
