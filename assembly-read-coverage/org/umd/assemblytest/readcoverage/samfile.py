@@ -5,9 +5,11 @@ Created on Nov 6, 2013
 '''
 
 import re
-from utils.intervaltree import IntervalTree
-from utils.intervaltree import Interval
+
 from constants import SEGMENT_UNMAPPED
+from utils.intervaltree import Interval
+from utils.intervaltree import IntervalTree
+
 
 class SamFile(object):
     '''
@@ -21,6 +23,9 @@ class SamFile(object):
         self._header = header
         self._alignments = alignments
         self._alignment_forest = {}
+
+        # TODO: Min and max positions for each of the alignments
+        # self._ref_boundaries = {}
 
         # Partition alignments by reference
         alns_by_ref = {}
@@ -39,9 +44,57 @@ class SamFile(object):
         Gets all alignments corresponding to the given region in the genome
         :param reference:
         :param start:
-        :param calc_length:
+        :param length:
         '''
         return self._alignment_forest[reference].search(start, start + length - 1)
+
+    def base_pair_coverage(self, reference, start, length):
+        '''
+        Returns a list of base-pair, coverage tuples. It is assumed that the same coverage
+        applies to all following base-pairs until the next entry
+        :param reference:
+        :param start:
+        :param length:
+        '''
+        alns = self.coverage(reference, start, length)
+
+        if len(alns) == 0:
+            return [(start, 0)]
+
+        # First we make a list of all starts and ends, keeping track, for each of the alignment they came from
+        points = []
+        for i in range(len(alns)):
+            points.append((alns[i].pos(), i))
+            points.append((alns[i].pos() + alns[i].length(), i))
+
+        # Second, we sort the list by these points
+        print points
+        points = sorted(points, key=lambda point: point[0])
+
+        # Finally, we compute coverage
+        coverage = []
+        open_alns = {}
+
+        overlaps = 0
+        last = min(points[0][0], start)
+
+        for i in range(0, len(points)):
+            if points[i][0] != last:
+                coverage.append((last, overlaps))
+
+            if points[i][1] in open_alns:
+                overlaps -= 1
+                del open_alns[points[i][1]]
+            else:
+                overlaps += 1
+                open_alns[points[i][1]] = True
+
+            last = points[i][0]
+
+        coverage.append((last, overlaps))
+
+        return coverage
+
 
     def alignments(self):
         return self._alignments
